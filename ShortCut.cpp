@@ -15,6 +15,7 @@
 #endif
 #include <chrono>
 #include<iostream>
+#include "MultiScaleTools.h"
 double  ShortCut_solver(int image_size, std::vector<double>& muXdat, std::vector<double>& muYdat);
  
 int main(int argc, char** argv) {

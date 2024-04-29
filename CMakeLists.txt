@@ -9,7 +9,9 @@ add_definitions(-std=c++11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}   -std=c++11")
 
 include_directories(.)
-INCLUDE_DIRECTORIES("/usr/include/eigen3")
+INCLUDE_DIRECTORIES("/home/xiawenzhou/eigen-3.3.7")
+
+
 
 find_package(Eigen3 REQUIRED)
 
@@ -41,7 +43,8 @@ set(CUDA_NVCC_FLAGS
     -fPIC )
 
 # set your path here
-LINK_DIRECTORIES("/home")
+LINK_DIRECTORIES("/home/xiawenzhou/dist/lib")
+LINK_DIRECTORIES("/usr/local/cuda/lib64")
 
 
 INCLUDE_DIRECTORIES (LogSinkhorn)

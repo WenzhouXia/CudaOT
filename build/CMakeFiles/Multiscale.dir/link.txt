@@ -1,0 +1,1 @@
+/usr/bin/c++    -std=c++11 -fopenmp -DVERBOSE CMakeFiles/Multiscale.dir/Multiscale.cpp.o -o Multiscale   -L/home/xiawenzhou/dist/lib  -L/usr/local/cuda/lib64  -Wl,-rpath,/home/xiawenzhou/dist/lib:/usr/local/cuda/lib64 Common/libCommon.a Sinkhorn/libSinkhorn.a 

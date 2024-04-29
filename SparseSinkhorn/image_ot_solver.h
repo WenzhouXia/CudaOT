@@ -4,5 +4,5 @@
 
 double image_ot_solver(int image_size,
                      std::vector<double> &muXdat,
-                     std::vector<double> &muYdat);
+                     std::vector<double> &muYdat, int dev, double maxError_input, double truncation_threshold);
 #endif // IMAGE_SOLVER_H

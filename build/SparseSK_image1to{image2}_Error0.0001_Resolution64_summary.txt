@@ -1,0 +1,29 @@
+WhiteNoise: Time: 1.60557
+GRFrough: Time: 1.76466
+GRFmoderate: Time: 1.76093
+GRFsmooth: Time: 1.67683
+LogGRF: Time: 1.64289
+LogitGRF: Time: 1.57278
+CauchyDensity: Time: 1.60447
+Shapes: Time: 0.034637
+ClassicImages: Time: 1.64629
+MicroscopyImages: Time: 0.020383
+1.61424
+1.72181
+1.7238
+1.64629
+1.63786
+1.59042
+1.60475
+0.029018
+1.65582
+0.021042
+——
+——
+——
+——
+——
+——
+——
+——
+——

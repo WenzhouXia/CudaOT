@@ -1240,13 +1240,11 @@ double getError_alpha_beta(COO_Sparese_Matrix<MAXELEMENT>  *kernel,
  
 template<int image_size>
 double cuda_image_ot_solver(std::vector<double> &muXdat,
-                             std::vector<double> &muYdat){
+                             std::vector<double> &muYdat, int dev, double maxError_input, double truncation_thresh){
 
 
     #define MAXELEMENT  ( 1 << (ALLOCALTE_MEMORY(image_size)) )
 
-
-    int dev = 0;
     cudaDeviceProp deviceProp;
     CHECK(cudaGetDeviceProperties(&deviceProp, dev));
     printf("device %d: %s \n", dev, deviceProp.name);
@@ -1307,13 +1305,13 @@ double cuda_image_ot_solver(std::vector<double> &muXdat,
 
 
     CuSinkhornSolverParameters cfg_={
-        1E-4, // maxError
-        100000, // maxIterations
+        maxError_input, // maxError
+        1000000, // maxIterations
         1000, // innerIterations
         20, // maxAbsorptionLoops
         1E3, // absorption_scalingBound
         1E3, // absorption_scalingLowerBound
-        1E-1, // truncation_thresh
+        truncation_thresh, // truncation_thresh
         1 // refineKernel when refining layer (as opposed to attempting to estimate directly)
         };
 
@@ -1410,6 +1408,7 @@ double cuda_image_ot_solver(std::vector<double> &muXdat,
     int xres = 0;
     int yres = 0;
     int layerBottom = layerFinest;
+    printf("layer_coarsest = %d, layer_finest = %d\n",layerCoarsest, layerFinest);
     double * origionals = (double *)malloc(sizeof(double) * OT_PROBLEM_SIZE(image_size));
     for (int i = 0 ; i < OT_PROBLEM_SIZE(image_size); ++i)
         origionals[i] = 1.0;
@@ -1451,6 +1450,9 @@ double cuda_image_ot_solver(std::vector<double> &muXdat,
             // for large problems
             cfg_.maxError = 1E-4;
         }
+        cfg_.maxError = maxError_input;
+        printf("layer = %d\n",layer);
+        printf("maxError = %.10e\n", cfg_.maxError);
         for(int nEps=0; nEps<h_eps.nEpsLists[layer]; nEps++) {
             eps = h_eps.epsLists[layer][nEps];
             printf("\teps=%e\n",eps);
@@ -1507,9 +1509,8 @@ double cuda_image_ot_solver(std::vector<double> &muXdat,
                                    muX_cuda,muY_cuda,
                                    cu_muXH,cu_muYH,muXH,muYH
                              );
-
-            if(msg!=0) return msg;
-
+            if (msg != 0)
+                return msg;
         } else {
             break;
         }
@@ -1539,7 +1540,7 @@ double cuda_image_ot_solver(std::vector<double> &muXdat,
     COO_Sparese_Matrix<MAXELEMENT> *kernel_host = (COO_Sparese_Matrix<MAXELEMENT> *)  malloc(  sizeof(COO_Sparese_Matrix<MAXELEMENT>) );
     cudaMemcpy(kernel_host, kernel,sizeof(COO_Sparese_Matrix<MAXELEMENT>),cudaMemcpyDeviceToHost);
     std::ofstream kernel_outFile;
- 
+
     std::string filename_kernel =   "output.csv";
     kernel_outFile.open(filename_kernel, std::ios::out);
     for (int i = 0 ; i < kernel_host->nonZeros; ++i){
